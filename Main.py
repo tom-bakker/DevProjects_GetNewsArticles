@@ -9,10 +9,12 @@ Args:
 URL : The URL of the article to webscrape.
 """
 def get_article(URL):
+    #TODO: Make it so that any News Article URL can be inserted and the program can find the article.
     page = requests.get(URL)
     soup = BeautifulSoup(page.content, 'html.parser')
     title = soup.find('h1')
     body = soup.find('div', class_='article-body')
+    #TODO:Add print to csv file so it can be better utilised.
     print(title.text)
     print(body.text)
 def main():

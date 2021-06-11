@@ -1,4 +1,4 @@
-"""Python project to webscrape particular news websites for articles.
+"""Python project to webscrape a Washinton Post page for the article.
 
 """
 from bs4 import BeautifulSoup
@@ -7,19 +7,41 @@ import requests
 
 Args:
 URL : The URL of the article to webscrape.
+Returns: String of the title of the article and body of the article.
 """
 def get_article(URL):
-    #TODO: Make it so that any News Article URL can be inserted and the program can find the article.
     page = requests.get(URL)
     soup = BeautifulSoup(page.content, 'html.parser')
     title = soup.find('h1')
     body = soup.find('div', class_='article-body')
-    #TODO:Add print to csv file so it can be better utilised.
-    print(title.text)
-    print(body.text)
+    formattedText = format_text(body.text)
+    return title.text +'\n'+ formattedText
+""" Iterates through text and adds a new line to the end of each period.
+
+Args: Text to be formatted with a new line at the end of each period.
+Returns: Formatted text
+"""
+def format_text(text):
+    returnText = ''
+    for x in text:
+        returnText += x
+        if x == '.':
+            returnText +='\n'
+    return returnText
+""" Writes text to file passed. 
+
+Args: 
+text: The text/string to be added to the file.
+fileName: The file name of the file to be written in.
+"""
+def write_to_file(text, fileName):
+    file = open("./" + fileName, "w+")
+    file.write(text)
+    print("Text written in file: " + fileName)
+    file.close()
 def main():
     URL = 'https://www.washingtonpost.com/technology/2020/09/25/privacy-check-blacklight/'
-    get_article(URL)
+    write_to_file(get_article(URL), "WashingtonPost.txt")
 if __name__ =="__main__":
     main()
 
